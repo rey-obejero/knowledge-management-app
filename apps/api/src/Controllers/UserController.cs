@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using FluentValidation;
 using KnowledgeManagementApp.Api.Models;
 using KnowledgeManagementApp.Api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,8 @@ namespace KnowledgeManagementApp.Api.Controllers;
 [ApiController]
 [Route("users")]
 [Produces("application/json")]
-public class UserController(IUserService userService) : ControllerBase
+public class UserController(IUserService userService, IValidator<UserRequestModel> validator)
+    : ControllerBase
 {
     private const string NotFoundTitle = "Not Found";
 
@@ -19,6 +21,27 @@ public class UserController(IUserService userService) : ControllerBase
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
     public async Task<IResult> PostAsync([FromBody] UserRequestModel user)
     {
+        var validation = await validator.ValidateAsync(
+            user,
+            options => options.IncludeRuleSets("CreateUser")
+        );
+
+        if (!validation.IsValid)
+        {
+            var errors = validation
+                .Errors.GroupBy(error => error.PropertyName)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Select(error => error.ErrorMessage).ToArray()
+                );
+
+            return TypedResults.ValidationProblem(
+                errors,
+                detail: "See the errors field for details.",
+                instance: HttpContext?.Request?.Path.ToString()
+            );
+        }
+
         if (await userService.RetrieveByUsernameAsync(user.Username) != null)
         {
             return TypedResults.Conflict(
@@ -94,6 +117,27 @@ public class UserController(IUserService userService) : ControllerBase
         [FromBody] UserRequestModel user
     )
     {
+        var validation = await validator.ValidateAsync(
+            user,
+            options => options.IncludeRuleSets("CreateUser")
+        );
+
+        if (!validation.IsValid)
+        {
+            var errors = validation
+                .Errors.GroupBy(error => error.PropertyName)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Select(error => error.ErrorMessage).ToArray()
+                );
+
+            return TypedResults.ValidationProblem(
+                errors,
+                detail: "See the errors field for details.",
+                instance: HttpContext?.Request?.Path.ToString()
+            );
+        }
+
         if (user.Username != username)
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status400BadRequest,

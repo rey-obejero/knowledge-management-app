@@ -1,8 +1,10 @@
 using AutoMapper;
+using FluentValidation;
 using KnowledgeManagementApp.Api.Data;
 using KnowledgeManagementApp.Api.Mappings;
 using KnowledgeManagementApp.Api.Repositories;
 using KnowledgeManagementApp.Api.Services;
+using KnowledgeManagementApp.Api.Validators;
 using Microsoft.EntityFrameworkCore;
 
 namespace KnowledgeManagementApp.Api.Extensions;
@@ -21,6 +23,12 @@ public static class ServiceCollectionExtensions
                 options.UseSqlite($"Data Source={dataSource}");
             });
 
+            return services;
+        }
+
+        public IServiceCollection AddValidators()
+        {
+            services.AddValidatorsFromAssemblyContaining<UserRequestModelValidator>();
             return services;
         }
 
