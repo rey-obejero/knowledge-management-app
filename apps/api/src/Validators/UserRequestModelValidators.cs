@@ -31,12 +31,7 @@ public class UserRequestModelValidator : AbstractValidator<UserRequestModel>
             "UpdateUser",
             () =>
             {
-                RuleFor(user => user.Username)
-                    .NotEmpty()
-                    .WithMessage("Username is required.")
-                    .MustAsync(BeUniqueUsername)
-                    .WithMessage("Username must be unique.");
-                ;
+                RuleFor(user => user.Username).NotEmpty().WithMessage("Username is required.");
 
                 RuleFor(user => user.Email).NotEmpty().WithMessage("Email is required.");
 
