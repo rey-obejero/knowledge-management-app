@@ -4,18 +4,24 @@ using KnowledgeManagementApp.Api.Repositories;
 
 namespace KnowledgeManagementApp.Api.Services;
 
-public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
+public class UserService(
+    IUserRepository userRepository,
+    ILogger<UserService> logger,
+    IMapper mapper
+) : IUserService
 {
     public async Task<UserResponseModel> CreateAsync(UserRequestModel userRequestModel)
     {
         var user = mapper.Map<User>(userRequestModel);
         await userRepository.AddAsync(user);
+        logger.LogInformation("User added to the Repository: {User}", user);
         return mapper.Map<UserResponseModel>(user);
     }
 
     public async Task<List<UserResponseModel>> RetrieveAsync()
     {
         var users = await userRepository.GetAllAsync();
+        logger.LogInformation("Users retrieved from Repository.");
         var userResponseModels = mapper.Map<List<UserResponseModel>>(users);
         return userResponseModels;
     }
@@ -38,6 +44,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         {
             mapper.Map(userRequestModel, user);
             await userRepository.UpdateAsync(user);
+            logger.LogInformation("User updated in Repository: {User}", user);
         }
     }
 
@@ -46,6 +53,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         if ((await userRepository.FindByUsernameAsync(username)) is User user)
         {
             await userRepository.RemoveAsync(user.Id);
+            logger.LogInformation("User with username {Username} removed in Repository", username);
         }
     }
 }

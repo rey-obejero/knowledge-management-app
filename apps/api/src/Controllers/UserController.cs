@@ -10,8 +10,11 @@ namespace KnowledgeManagementApp.Api.Controllers;
 [ApiController]
 [Route("users")]
 [Produces("application/json")]
-public class UserController(IUserService userService, IValidator<UserRequestModel> validator)
-    : ControllerBase
+public class UserController(
+    IUserService userService,
+    ILogger<UserController> logger,
+    IValidator<UserRequestModel> validator
+) : ControllerBase
 {
     private const string NotFoundTitle = "Not Found";
 
@@ -35,6 +38,7 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
                     group => group.Select(error => error.ErrorMessage).ToArray()
                 );
 
+            logger.LogWarning("POST /users validation failed: {@Errors}", errors);
             return TypedResults.ValidationProblem(
                 errors,
                 detail: "See the errors field for details.",
@@ -44,6 +48,10 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
 
         if (await userService.RetrieveByUsernameAsync(user.Username) != null)
         {
+            logger.LogWarning(
+                "POST /users failed: User with username {Username} already exists.",
+                user.Username
+            );
             return TypedResults.Conflict(
                 new ProblemDetails
                 {
@@ -58,6 +66,8 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
 
         var result = await userService.CreateAsync(user);
 
+        logger.LogInformation("POST /users created: {@User}", result);
+
         return TypedResults.CreatedAtRoute(
             routeValues: new { username = result.Username },
             value: result
@@ -68,21 +78,23 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
     public async Task<IResult> GetAsync()
     {
         var users = await userService.RetrieveAsync();
+        logger.LogInformation("GET /users retrieved {Count} user(s)", users.Count);
 
         return TypedResults.Ok(users);
     }
 
-    [Authorize]
-    [HttpGet("id:Guid")]
+    [HttpGet("{id:Guid}")]
     public async Task<IResult> GetByIdAsync([FromRoute] Guid id)
     {
         var user = await userService.RetrieveByIdAsync(id);
         if (user != null)
         {
+            logger.LogInformation("GET /users/{Id} retrieved: {@User}", id, user);
             return TypedResults.Ok(user);
         }
         else
         {
+            logger.LogWarning("GET /users/{Id} not found", id);
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status404NotFound,
                 title: NotFoundTitle,
@@ -98,10 +110,16 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
         var user = await userService.RetrieveByUsernameAsync(username);
         if (user != null)
         {
+            logger.LogInformation(
+                "GET /users/username/{Username} retrieved: {@User}",
+                username,
+                user
+            );
             return TypedResults.Ok(user);
         }
         else
         {
+            logger.LogWarning("GET /users/username/{Username} not found", username);
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status404NotFound,
                 title: NotFoundTitle,
@@ -119,7 +137,7 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
     {
         var validation = await validator.ValidateAsync(
             user,
-            options => options.IncludeRuleSets("CreateUser")
+            options => options.IncludeRuleSets("UpdateUser")
         );
 
         if (!validation.IsValid)
@@ -131,6 +149,12 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
                     group => group.Select(error => error.ErrorMessage).ToArray()
                 );
 
+            logger.LogWarning(
+                "PUT /users/username/{Username} validation failed: {@Errors}",
+                username,
+                errors
+            );
+
             return TypedResults.ValidationProblem(
                 errors,
                 detail: "See the errors field for details.",
@@ -139,14 +163,22 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
         }
 
         if (user.Username != username)
+        {
+            logger.LogWarning(
+                "PutAsync username mismatch: route {Username} != body {UserUsername}",
+                username,
+                user.Username
+            );
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status400BadRequest,
                 title: "Bad Request",
                 detail: "Username in the route does not match the username in the request body.",
                 instance: HttpContext?.Request?.Path.ToString()
             );
+        }
         if (userService.RetrieveByUsernameAsync(username) == null)
         {
+            logger.LogWarning("PUT /users/username/{Username} not found", username);
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status404NotFound,
                 title: NotFoundTitle,
@@ -156,6 +188,15 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
         }
 
         await userService.UpdateAsync(user);
+        var sanitizedUserString = user.ToString()
+            ?.Replace(Environment.NewLine, string.Empty)
+            .Replace("\r", string.Empty)
+            .Replace("\r", string.Empty);
+        logger.LogInformation(
+            "PUT /users/username/{Username} updated: {User}",
+            username,
+            sanitizedUserString
+        );
 
         return TypedResults.NoContent();
     }
@@ -165,6 +206,7 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
     {
         if (userService.RetrieveByUsernameAsync(username) == null)
         {
+            logger.LogWarning("DELETE /users/username/{Username} not found", username);
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status404NotFound,
                 title: NotFoundTitle,
@@ -175,6 +217,7 @@ public class UserController(IUserService userService, IValidator<UserRequestMode
         else
         {
             await userService.DeleteAsync(username);
+            logger.LogInformation("DELETE /users/username/{Username} deleted", username);
             return TypedResults.NoContent();
         }
     }

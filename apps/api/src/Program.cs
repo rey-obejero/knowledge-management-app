@@ -1,8 +1,16 @@
 using KnowledgeManagementApp.Api.Data;
 using KnowledgeManagementApp.Api.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder
+    .Configuration.SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+builder.Host.UseSerilog();
 
 builder.Services.AddSwaggerConfiguration();
 
@@ -17,6 +25,8 @@ builder.Services.RegisterUserRepository();
 builder.Services.AddDbContextWithSqlite(builder.Environment);
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
