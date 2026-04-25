@@ -46,11 +46,11 @@ public class UserController(
             );
         }
 
-        if (await userService.RetrieveByUsernameAsync(user.Username) != null)
+        if (await userService.RetrieveByUsernameAsync(user.UserName) != null)
         {
             logger.LogWarning(
                 "POST /users failed: User with username {Username} already exists.",
-                user.Username
+                user.UserName
             );
             return TypedResults.Conflict(
                 new ProblemDetails
@@ -58,7 +58,7 @@ public class UserController(
                     Type = "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409",
                     Title = "Conflict",
                     Status = StatusCodes.Status409Conflict,
-                    Detail = $"User with username '{user.Username}' already exists.",
+                    Detail = $"User with username '{user.UserName}' already exists.",
                     Instance = HttpContext?.Request?.Path.ToString(),
                 }
             );
@@ -69,7 +69,7 @@ public class UserController(
         logger.LogInformation("POST /users created: {@User}", result);
 
         return TypedResults.CreatedAtRoute(
-            routeValues: new { username = result.Username },
+            routeValues: new { username = result.UserName },
             value: result
         );
     }
@@ -104,6 +104,7 @@ public class UserController(
         }
     }
 
+    [Authorize]
     [HttpGet("username/{username}")]
     public async Task<IResult> GetByUsernameAsync([FromRoute] String username)
     {
@@ -162,12 +163,12 @@ public class UserController(
             );
         }
 
-        if (user.Username != username)
+        if (user.UserName != username)
         {
             logger.LogWarning(
                 "PutAsync username mismatch: route {Username} != body {UserUsername}",
                 username,
-                user.Username
+                user.UserName
             );
             return TypedResults.Problem(
                 statusCode: StatusCodes.Status400BadRequest,
@@ -201,24 +202,24 @@ public class UserController(
         return TypedResults.NoContent();
     }
 
-    [HttpDelete("username/{username}")]
-    public async Task<IResult> DeleteAsync([FromRoute] string username)
-    {
-        if (userService.RetrieveByUsernameAsync(username) == null)
-        {
-            logger.LogWarning("DELETE /users/username/{Username} not found", username);
-            return TypedResults.Problem(
-                statusCode: StatusCodes.Status404NotFound,
-                title: NotFoundTitle,
-                detail: $"User with username '{username}' was not found.",
-                instance: HttpContext?.Request?.Path.ToString()
-            );
-        }
-        else
-        {
-            await userService.DeleteAsync(username);
-            logger.LogInformation("DELETE /users/username/{Username} deleted", username);
-            return TypedResults.NoContent();
-        }
-    }
+    // [HttpDelete("username/{username}")]
+    // public async Task<IResult> DeleteAsync([FromRoute] string username)
+    // {
+    //     if (userService.RetrieveByUsernameAsync(username) == null)
+    //     {
+    //         logger.LogWarning("DELETE /users/username/{Username} not found", username);
+    //         return TypedResults.Problem(
+    //             statusCode: StatusCodes.Status404NotFound,
+    //             title: NotFoundTitle,
+    //             detail: $"User with username '{username}' was not found.",
+    //             instance: HttpContext?.Request?.Path.ToString()
+    //         );
+    //     }
+    //     else
+    //     {
+    //         await userService.DeleteAsync(username);
+    //         logger.LogInformation("DELETE /users/username/{Username} deleted", username);
+    //         return TypedResults.NoContent();
+    //     }
+    // }
 }

@@ -14,5 +14,5 @@ public interface IUserService
 
     public Task UpdateAsync(UserRequestModel userRequestModel);
 
-    public Task DeleteAsync(String username);
+    // public Task DeleteAsync(String username);
 }

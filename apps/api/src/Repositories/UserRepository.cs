@@ -9,5 +9,5 @@ public sealed class UserRepository(KnowledgeManagementAppDbContext dbContext)
         IUserRepository
 {
     public async Task<User?> FindByUsernameAsync(String username) =>
-        await _dbSet.FirstOrDefaultAsync(u => u.Username == username);
+        await _dbSet.FirstOrDefaultAsync(u => u.UserName == username);
 }

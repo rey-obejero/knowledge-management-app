@@ -40,7 +40,7 @@ public class UserService(
 
     public async Task UpdateAsync(UserRequestModel userRequestModel)
     {
-        if ((await userRepository.FindByUsernameAsync(userRequestModel.Username)) is User user)
+        if ((await userRepository.FindByUsernameAsync(userRequestModel.UserName)) is User user)
         {
             mapper.Map(userRequestModel, user);
             await userRepository.UpdateAsync(user);
@@ -48,12 +48,12 @@ public class UserService(
         }
     }
 
-    public async Task DeleteAsync(String username)
-    {
-        if ((await userRepository.FindByUsernameAsync(username)) is User user)
-        {
-            await userRepository.RemoveAsync(user.Id);
-            logger.LogInformation("User with username {Username} removed in Repository", username);
-        }
-    }
+    // public async Task DeleteAsync(String username)
+    // {
+    //     if ((await userRepository.FindByUsernameAsync(username)) is User user)
+    //     {
+    //         await userRepository.RemoveAsync(user.Id);
+    //         logger.LogInformation("User with username {Username} removed in Repository", username);
+    //     }
+    // }
 }

@@ -1,16 +1,15 @@
 using KnowledgeManagementApp.Api.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace KnowledgeManagementApp.Api.Data;
 
-public class KnowledgeManagementAppDbContext : DbContext
+public class KnowledgeManagementAppDbContext : IdentityDbContext<User>
 {
     public KnowledgeManagementAppDbContext(
         DbContextOptions<KnowledgeManagementAppDbContext> options
     )
         : base(options) { }
-
-    public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

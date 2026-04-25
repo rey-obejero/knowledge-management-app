@@ -6,6 +6,8 @@ using KnowledgeManagementApp.Api.Repositories;
 using KnowledgeManagementApp.Api.Services;
 using KnowledgeManagementApp.Api.Validators;
 using Microsoft.EntityFrameworkCore;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 
 namespace KnowledgeManagementApp.Api.Extensions;
 
@@ -34,13 +36,37 @@ public static class ServiceCollectionExtensions
 
         public IServiceCollection AddSwaggerConfiguration()
         {
-            services.AddOpenApi();
+            services.AddOpenApiDocument(config =>
+            {
+                config.Title = "KnowledgeManagementApp";
+
+                config.AddSecurity(
+                    "Bearer",
+                    new NSwag.OpenApiSecurityScheme
+                    {
+                        Type = NSwag.OpenApiSecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        Description = "Enter: Bearer {your JWT token}",
+                    }
+                );
+
+                config.OperationProcessors.Add(
+                    new AspNetCoreOperationSecurityScopeProcessor("Bearer")
+                );
+            });
             return services;
         }
 
         public IServiceCollection RegisterUserService()
         {
             services.AddScoped<IUserService, UserService>();
+            return services;
+        }
+
+        public IServiceCollection RegisterTokenService()
+        {
+            services.AddScoped<TokenService>();
             return services;
         }
 
