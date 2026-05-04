@@ -37,7 +37,7 @@ public class AuthController : ControllerBase
             );
         }
 
-        return result.Match<TokenDto>(value => CreatedAtRoute("Signup", value));
+        return result.ToActionResult<TokenDto>(value => CreatedAtRoute("Signup", value));
     }
 
     [HttpPost("[action]", Name = "Login")]
@@ -59,6 +59,6 @@ public class AuthController : ControllerBase
             );
         }
 
-        return result.Match<TokenDto>(value => Ok(value));
+        return result.ToActionResult<TokenDto>(value => Ok(value));
     }
 }

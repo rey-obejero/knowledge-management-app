@@ -6,12 +6,15 @@ namespace KnowledgeManagementApp.Api.Web.Extensions;
 
 public static class ResultExtensions
 {
-    public static IActionResult Match(this Result result, Func<IActionResult> onSuccess)
+    public static IActionResult ToActionResult(this Result result, Func<IActionResult> onSuccess)
     {
         return result.IsSuccess ? onSuccess() : MapError(result.Error);
     }
 
-    public static IActionResult Match<T>(this Result<T> result, Func<T, IActionResult> onSuccess)
+    public static IActionResult ToActionResult<T>(
+        this Result<T> result,
+        Func<T, IActionResult> onSuccess
+    )
     {
         return result.IsSuccess ? onSuccess(result.Value) : MapError(result.Error);
     }
