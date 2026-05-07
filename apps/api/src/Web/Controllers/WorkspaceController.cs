@@ -57,4 +57,25 @@ public class WorkspaceController : ControllerBase
 
         return result.ToActionResult<IEnumerable<WorkspaceDto>>(value => Ok(value));
     }
+
+    [Authorize]
+    [HttpGet("{Id:Guid}", Name = "FindWorkspace")]
+    [ProducesResponseType<WorkspaceDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RetrieveWorkspace([FromRoute] FindWorkspaceRequestDto request)
+    {
+        var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var result = await _workspaceService.FindByIdAsync(userId, request.Id);
+
+        if (result.IsFailure)
+        {
+            _logger.LogWarning(
+                "Workspace retrieval failed. {ErrorCode} {ErrorType}",
+                result.Error.Code,
+                result.Error.Type
+            );
+        }
+
+        return result.ToActionResult<WorkspaceDto>(value => Ok(value));
+    }
 }

@@ -47,4 +47,21 @@ public class WorkspaceService : IWorkspaceService
             result.Select(workspace => mapper.WorkspaceToWorkspaceDto(workspace)).ToList()
         );
     }
+
+    public async Task<Result<WorkspaceDto>> FindByIdAsync(
+        Guid userId,
+        Guid id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var result = await _workspaceRepository.FindByIdAsync(id);
+        if (result is null)
+        {
+            return Result<WorkspaceDto>.Failure(WorkspaceErrors.NotFound);
+        }
+
+        var mapper = new WorkspaceMapper();
+
+        return Result<WorkspaceDto>.Success(mapper.WorkspaceToWorkspaceDto(result));
+    }
 }

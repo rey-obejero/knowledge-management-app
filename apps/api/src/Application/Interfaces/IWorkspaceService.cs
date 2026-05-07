@@ -14,4 +14,10 @@ public interface IWorkspaceService
         Guid userId,
         CancellationToken cancellationToken = default
     );
+
+    Task<Result<WorkspaceDto>> FindByIdAsync(
+        Guid userId,
+        Guid id,
+        CancellationToken cancellationToken = default
+    );
 }
