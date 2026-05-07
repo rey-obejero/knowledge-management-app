@@ -28,6 +28,14 @@ public class WorkspaceRepository : IWorkspaceRepository
         return await _dbSet.AsNoTracking().ToListAsync();
     }
 
+    public async Task<IEnumerable<Workspace>> GetAllByUserIdAsync(Guid userId)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(workspace => workspace.UserId == userId)
+            .ToListAsync();
+    }
+
     public async Task<Workspace>? FindByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);

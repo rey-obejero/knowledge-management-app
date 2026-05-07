@@ -34,4 +34,17 @@ public class WorkspaceService : IWorkspaceService
 
         return Result<WorkspaceDto>.Success(mapper.WorkspaceToWorkspaceDto(result));
     }
+
+    public async Task<Result<IEnumerable<WorkspaceDto>>> RetrieveAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var result = await _workspaceRepository.GetAllByUserIdAsync(userId);
+        var mapper = new WorkspaceMapper();
+
+        return Result<IEnumerable<WorkspaceDto>>.Success(
+            result.Select(workspace => mapper.WorkspaceToWorkspaceDto(workspace)).ToList()
+        );
+    }
 }

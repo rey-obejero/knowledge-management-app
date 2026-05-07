@@ -9,4 +9,9 @@ public interface IWorkspaceService
         string name,
         CancellationToken cancellationToken = default
     );
+
+    Task<Result<IEnumerable<WorkspaceDto>>> RetrieveAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default
+    );
 }

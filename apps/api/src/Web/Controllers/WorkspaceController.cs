@@ -45,4 +45,18 @@ public class WorkspaceController : ControllerBase
             CreatedAtRoute("CreateWorkspace", value)
         );
     }
+
+    [Authorize]
+    [HttpGet(Name = "RetrieveWorkspaces")]
+    [ProducesResponseType<IEnumerable<WorkspaceDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> RetrieveWorkspaces()
+    {
+        var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var result = await _workspaceService.RetrieveAsync(userId);
+
+        return result.ToActionResult<IEnumerable<WorkspaceDto>>(value =>
+            CreatedAtRoute("CreateWorkspace", value)
+        );
+    }
 }

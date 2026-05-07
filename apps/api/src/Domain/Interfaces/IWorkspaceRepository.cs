@@ -8,6 +8,8 @@ public interface IWorkspaceRepository
 
     Task<IEnumerable<Workspace>> GetAllAsync();
 
+    Task<IEnumerable<Workspace>> GetAllByUserIdAsync(Guid userId);
+
     Task<Workspace>? FindByIdAsync(Guid id);
 
     Task<Workspace>? FindByNameAsync(string name);
