@@ -1,3 +1,4 @@
+using KnowledgeManagementApp.Api.Domain.Entities;
 using KnowledgeManagementApp.Api.Infrastructure.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,10 @@ public class KnowledgeManagementAppDbContext : IdentityDbContext<ApplicationUser
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<ApplicationUser>(entity =>
+        modelBuilder.Entity<Workspace>(entity =>
         {
-            entity.HasKey(user => user.Id);
-            entity.Property(user => user.Id).ValueGeneratedOnAdd();
+            entity.HasKey(workspace => workspace.Id);
+            entity.Property(workspace => workspace.Id).ValueGeneratedOnAdd();
         });
     }
 }
