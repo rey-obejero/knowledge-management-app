@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var result = await _authService.SignUpAsync(request, cancellationToken);
+        var result = await _authService.SignupAsync(request, cancellationToken);
 
         if (result.IsFailure)
         {

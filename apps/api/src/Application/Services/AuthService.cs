@@ -14,7 +14,7 @@ public class AuthService : IAuthService
         _jwtTokenService = jwtTokenService;
     }
 
-    public async Task<Result<TokenDto>> SignUpAsync(
+    public async Task<Result<TokenDto>> SignupAsync(
         SignupRequestDto request,
         CancellationToken cancellationToken = default
     )
