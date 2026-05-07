@@ -55,8 +55,6 @@ public class WorkspaceController : ControllerBase
         var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         var result = await _workspaceService.RetrieveAsync(userId);
 
-        return result.ToActionResult<IEnumerable<WorkspaceDto>>(value =>
-            CreatedAtRoute("CreateWorkspace", value)
-        );
+        return result.ToActionResult<IEnumerable<WorkspaceDto>>(value => Ok(value));
     }
 }
