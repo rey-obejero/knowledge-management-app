@@ -25,6 +25,8 @@ public class WorkspaceController : ControllerBase
 
     [Authorize]
     [HttpPost(Name = "CreateWorkspace")]
+    [ProducesResponseType<WorkspaceDto>(StatusCodes.Status201Created)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateWorkspace(CreateWorkspaceRequestDto request)
     {
         var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
