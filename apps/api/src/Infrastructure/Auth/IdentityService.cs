@@ -8,15 +8,10 @@ namespace KnowledgeManagementApp.Api.Infrastructure.Auth;
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public IdentityService(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager
-    )
+    public IdentityService(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
     }
 
     public async Task<Result<string>> CreateIdentityAsync(
