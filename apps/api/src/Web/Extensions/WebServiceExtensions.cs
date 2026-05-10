@@ -9,9 +9,21 @@ public static class WebServiceExtensions
 {
     public static IServiceCollection AddWeb(
         this IServiceCollection services,
+        IWebHostEnvironment environment,
         IConfiguration configuration
     )
     {
+        if (environment.IsDevelopment())
+        {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(corsPolicyBuilder =>
+                {
+                    corsPolicyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+        }
+
         services.AddControllers();
         services.Configure<RouteOptions>(options =>
         {

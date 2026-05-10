@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
 builder.Host.UseSerilog();
 
-builder.Services.AddWeb(builder.Configuration);
+builder.Services.AddWeb(builder.Environment, builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
@@ -20,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUi();
 }
 
+app.UseCors();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseAuthentication();
