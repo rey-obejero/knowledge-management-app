@@ -13,6 +13,10 @@ export const paths = {
     home: {
       path: '/',
       getHref: () => '/',
+    },
+    workspaces: {
+      path: '/workspaces/:workspaceId',
+      getHref: (id: string) => `/workspaces/${id}`,
     }
   }
 }

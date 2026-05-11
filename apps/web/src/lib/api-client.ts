@@ -13,9 +13,11 @@ export const apiClient = axios.create(
 );
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+  const auth = JSON.parse(localStorage.getItem('auth') ?? 'null')?.state;
+  const accessToken = auth?.accessToken;
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
 
   return config;
@@ -23,7 +25,7 @@ apiClient.interceptors.request.use((config) => {
 
 apiClient.interceptors.response.use((response) => response, (error) => {
   if (error.response?.status === 401) {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('auth');
     window.location.href = paths.auth.login.getHref();
   }
 })

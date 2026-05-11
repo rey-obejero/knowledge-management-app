@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router/dom';
 import { LoginRoute } from './routes/auth/login';
 import { HomeRoute } from './routes/app/home';
+import { AppRoot } from './routes/app/root';
 
 export const createAppRouter = () =>
   createBrowserRouter(
@@ -13,10 +14,14 @@ export const createAppRouter = () =>
       },
       {
         path: paths.app.root.path,
+        element: <AppRoot />,
         children: [
           {
             path: paths.app.home.path,
             element: <HomeRoute />,
+          },
+          {
+            path: paths.app.workspaces.path,
           }
         ],
       }

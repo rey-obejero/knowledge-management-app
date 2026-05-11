@@ -1,10 +1,11 @@
-import { apiClient } from "./client";
+import { apiClient } from "@/lib/api-client";
 import type { LoginRequest, Token } from "../types/auth.types";
-import { paths } from "@/config/paths";
+
+const AUTH_API_BASE_URL = '/auth';
 
 export const authApi = {
   login: async (data: LoginRequest): Promise<Token> => {
-    const response = await apiClient.post<Token>('https://localhost:7100/api/auth/login', data);
+    const response = await apiClient.post<Token>(`${AUTH_API_BASE_URL}/login`, data);
     return response.data;
   }
 };
