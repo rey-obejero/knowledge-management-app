@@ -16,6 +16,8 @@ public class KnowledgeManagementAppDbContext : IdentityDbContext<ApplicationUser
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<User>();
+
         modelBuilder.Entity<Workspace>(entity =>
         {
             entity.HasKey(workspace => workspace.Id);

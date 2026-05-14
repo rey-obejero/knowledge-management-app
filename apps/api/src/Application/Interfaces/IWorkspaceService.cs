@@ -4,18 +4,18 @@ namespace KnowledgeManagementApp.Api.Application.Interfaces;
 
 public interface IWorkspaceService
 {
-    Task<Result<WorkspaceDto>> CreateWorkspaceAsync(
+    Task<Result<WorkspaceResultDto>> CreateWorkspaceAsync(
         Guid userId,
         string name,
         CancellationToken cancellationToken = default
     );
 
-    Task<Result<IEnumerable<WorkspaceDto>>> RetrieveAsync(
+    Task<Result<IEnumerable<WorkspaceResultDto>>> RetrieveAsync(
         Guid userId,
         CancellationToken cancellationToken = default
     );
 
-    Task<Result<WorkspaceDto>> FindByIdAsync(
+    Task<Result<WorkspaceResultDto>> FindByIdAsync(
         Guid userId,
         Guid id,
         CancellationToken cancellationToken = default

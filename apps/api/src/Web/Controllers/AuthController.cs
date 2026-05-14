@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using KnowledgeManagementApp.Api.Application.Dtos;
 using KnowledgeManagementApp.Api.Application.Interfaces;
 using KnowledgeManagementApp.Api.Web.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KnowledgeManagementApp.Api.Web.Controllers;
@@ -19,7 +21,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("[action]", Name = "Signup")]
-    [ProducesResponseType<TokenDto>(StatusCodes.Status201Created)]
+    [ProducesResponseType<AuthResultDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SignUp(
         SignupRequestDto request,
@@ -37,11 +39,11 @@ public class AuthController : ControllerBase
             );
         }
 
-        return result.ToActionResult<TokenDto>(value => CreatedAtRoute("Signup", value));
+        return result.ToActionResult<AuthResultDto>(value => CreatedAtRoute("Signup", value));
     }
 
     [HttpPost("[action]", Name = "Login")]
-    [ProducesResponseType<TokenDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<AuthResultDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login(
         LoginRequestDto request,
@@ -59,6 +61,27 @@ public class AuthController : ControllerBase
             );
         }
 
-        return result.ToActionResult<TokenDto>(value => Ok(value));
+        return result.ToActionResult<AuthResultDto>(value => Ok(value));
+    }
+
+    [Authorize]
+    [HttpGet("[action]", Name = "GetMe")]
+    [ProducesResponseType<UserResultDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
+    {
+        var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        var result = await _authService.GetAuthenticatedUserAsync(userId, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            _logger.LogWarning(
+                "User retrieval failed. {ErrorCode} {ErrorType}",
+                result.Error.Code,
+                result.Error.Type
+            );
+        }
+
+        return result.ToActionResult<UserResultDto>(value => Ok(value));
     }
 }

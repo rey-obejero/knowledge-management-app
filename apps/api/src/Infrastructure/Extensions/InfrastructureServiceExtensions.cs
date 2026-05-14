@@ -27,9 +27,12 @@ public static class InfrastructureServiceExtensions
             .AddEntityFrameworkStores<KnowledgeManagementAppDbContext>()
             .AddDefaultTokenProviders();
 
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
 
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
 
         services.Configure<JwtOptions>(configuration.GetSection(("Jwt")));

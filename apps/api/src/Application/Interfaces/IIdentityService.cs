@@ -1,4 +1,4 @@
-using KnowledgeManagementApp.Api.Application;
+using KnowledgeManagementApp.Api.Domain.Entities;
 
 namespace KnowledgeManagementApp.Api.Application.Interfaces;
 

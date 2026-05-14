@@ -1,9 +1,7 @@
 namespace KnowledgeManagementApp.Api.Domain.Entities;
 
-public class Workspace
+public class Workspace : BaseEntity
 {
-    public Guid Id { get; set; } = new Guid();
     public Guid UserId { get; set; }
-    public string Name { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public required string Name { get; set; }
 }

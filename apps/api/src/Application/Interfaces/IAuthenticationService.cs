@@ -4,13 +4,18 @@ namespace KnowledgeManagementApp.Api.Application.Interfaces;
 
 public interface IAuthService
 {
-    Task<Result<TokenDto>> SignupAsync(
+    Task<Result<AuthResultDto>> SignupAsync(
         SignupRequestDto request,
         CancellationToken cancellationToken = default
     );
 
-    Task<Result<TokenDto>> LoginAsync(
+    Task<Result<AuthResultDto>> LoginAsync(
         LoginRequestDto request,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<Result<UserResultDto>> GetAuthenticatedUserAsync(
+        Guid userId,
         CancellationToken cancellationToken = default
     );
 }

@@ -1,5 +1,6 @@
 using KnowledgeManagementApp.Api.Application;
 using KnowledgeManagementApp.Api.Application.Interfaces;
+using KnowledgeManagementApp.Api.Domain.Entities;
 using KnowledgeManagementApp.Api.Domain.Errors;
 using Microsoft.AspNetCore.Identity;
 

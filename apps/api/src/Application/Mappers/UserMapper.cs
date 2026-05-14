@@ -5,7 +5,7 @@ using Riok.Mapperly.Abstractions;
 namespace KnowledgeManagementApp.Api.Application.Mappers;
 
 [Mapper]
-public partial class WorkspaceMapper
+public partial class UserMapper
 {
-    public partial WorkspaceResultDto WorkspaceToWorkspaceResultDto(Workspace workspace);
+    public partial UserResultDto UserToUserResultDto(User user);
 }

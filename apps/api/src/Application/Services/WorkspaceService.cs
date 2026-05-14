@@ -10,13 +10,15 @@ namespace KnowledgeManagementApp.Api.Application.Services;
 public class WorkspaceService : IWorkspaceService
 {
     private readonly IWorkspaceRepository _workspaceRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public WorkspaceService(IWorkspaceRepository workspaceRepository)
+    public WorkspaceService(IWorkspaceRepository workspaceRepository, IUnitOfWork unitOfWork)
     {
         _workspaceRepository = workspaceRepository;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<Result<WorkspaceDto>> CreateWorkspaceAsync(
+    public async Task<Result<WorkspaceResultDto>> CreateWorkspaceAsync(
         Guid userId,
         string name,
         CancellationToken cancellationToken
@@ -24,18 +26,20 @@ public class WorkspaceService : IWorkspaceService
     {
         if (await _workspaceRepository.FindByNameAsync(name) is not null)
         {
-            return Result<WorkspaceDto>.Failure(WorkspaceErrors.WorkspaceNameExists);
+            return Result<WorkspaceResultDto>.Failure(WorkspaceErrors.WorkspaceNameExists);
         }
 
         var result = await _workspaceRepository.AddAsync(
             new Workspace() { UserId = userId, Name = name }
         );
+        await _unitOfWork.SaveChangesAsync();
+
         var mapper = new WorkspaceMapper();
 
-        return Result<WorkspaceDto>.Success(mapper.WorkspaceToWorkspaceDto(result));
+        return Result<WorkspaceResultDto>.Success(mapper.WorkspaceToWorkspaceResultDto(result));
     }
 
-    public async Task<Result<IEnumerable<WorkspaceDto>>> RetrieveAsync(
+    public async Task<Result<IEnumerable<WorkspaceResultDto>>> RetrieveAsync(
         Guid userId,
         CancellationToken cancellationToken = default
     )
@@ -43,12 +47,12 @@ public class WorkspaceService : IWorkspaceService
         var result = await _workspaceRepository.GetAllByUserIdAsync(userId);
         var mapper = new WorkspaceMapper();
 
-        return Result<IEnumerable<WorkspaceDto>>.Success(
-            result.Select(workspace => mapper.WorkspaceToWorkspaceDto(workspace)).ToList()
+        return Result<IEnumerable<WorkspaceResultDto>>.Success(
+            result.Select(workspace => mapper.WorkspaceToWorkspaceResultDto(workspace)).ToList()
         );
     }
 
-    public async Task<Result<WorkspaceDto>> FindByIdAsync(
+    public async Task<Result<WorkspaceResultDto>> FindByIdAsync(
         Guid userId,
         Guid id,
         CancellationToken cancellationToken = default
@@ -57,11 +61,11 @@ public class WorkspaceService : IWorkspaceService
         var result = await _workspaceRepository.FindByIdAsync(id);
         if (result is null)
         {
-            return Result<WorkspaceDto>.Failure(WorkspaceErrors.NotFound);
+            return Result<WorkspaceResultDto>.Failure(WorkspaceErrors.NotFound);
         }
 
         var mapper = new WorkspaceMapper();
 
-        return Result<WorkspaceDto>.Success(mapper.WorkspaceToWorkspaceDto(result));
+        return Result<WorkspaceResultDto>.Success(mapper.WorkspaceToWorkspaceResultDto(result));
     }
 }

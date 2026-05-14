@@ -25,7 +25,7 @@ public class WorkspaceController : ControllerBase
 
     [Authorize]
     [HttpPost(Name = "CreateWorkspace")]
-    [ProducesResponseType<WorkspaceDto>(StatusCodes.Status201Created)]
+    [ProducesResponseType<WorkspaceResultDto>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateWorkspace(CreateWorkspaceRequestDto request)
     {
@@ -41,26 +41,26 @@ public class WorkspaceController : ControllerBase
             );
         }
 
-        return result.ToActionResult<WorkspaceDto>(value =>
+        return result.ToActionResult<WorkspaceResultDto>(value =>
             CreatedAtRoute("CreateWorkspace", value)
         );
     }
 
     [Authorize]
     [HttpGet(Name = "RetrieveWorkspaces")]
-    [ProducesResponseType<IEnumerable<WorkspaceDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IEnumerable<WorkspaceResultDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RetrieveWorkspaces()
     {
         var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
         var result = await _workspaceService.RetrieveAsync(userId);
 
-        return result.ToActionResult<IEnumerable<WorkspaceDto>>(value => Ok(value));
+        return result.ToActionResult<IEnumerable<WorkspaceResultDto>>(value => Ok(value));
     }
 
     [Authorize]
     [HttpGet("{Id:Guid}", Name = "FindWorkspace")]
-    [ProducesResponseType<WorkspaceDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<WorkspaceResultDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RetrieveWorkspace([FromRoute] FindWorkspaceRequestDto request)
     {
@@ -76,6 +76,6 @@ public class WorkspaceController : ControllerBase
             );
         }
 
-        return result.ToActionResult<WorkspaceDto>(value => Ok(value));
+        return result.ToActionResult<WorkspaceResultDto>(value => Ok(value));
     }
 }
