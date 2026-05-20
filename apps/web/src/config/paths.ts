@@ -1,9 +1,17 @@
 export const paths = {
-  auth: {
-    login: {
-      path: '/auth/login',
-      getHref: () => '/auth/login',
-    }
+  authentication: {
+    root: {
+      path: '/authentication',
+      getHref: () => '/authentication',
+    },
+    signUp: {
+      path: '/authentication/sign-up',
+      getHref: () => '/authentication/sign-up',
+    },
+    signIn: {
+      path: '/authentication/sign-in',
+      getHref: () => '/authentication/sign-in',
+    },
   },
   app: {
     root: {
@@ -15,8 +23,21 @@ export const paths = {
       getHref: () => '/',
     },
     workspaces: {
-      path: '/workspaces/:workspaceId',
-      getHref: (id: string) => `/workspaces/${id}`,
-    }
-  }
-}
+      path: '/w',
+      getHref: () => '/w',
+    },
+    workspace: {
+      path: '/w/:workspaceId',
+      getHref: (id: string) => `/w/${id}`,
+    },
+    entries: {
+      path: '/w/:workspaceId/entries/',
+      getHref: (workspaceId: string) => `/w/${workspaceId}/entries`,
+    },
+    entry: {
+      path: '/w/:workspaceId/entries/:entryId',
+      getHref: (workspaceId: string, entryId: string) =>
+        `/w/${workspaceId}/entries/${entryId}`,
+    },
+  },
+};

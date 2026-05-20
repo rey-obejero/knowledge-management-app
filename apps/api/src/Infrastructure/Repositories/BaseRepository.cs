@@ -31,4 +31,9 @@ public class BaseRepository<T> : IBaseRepository<T>
     {
         return await _dbSet.FindAsync(id);
     }
+
+    public async Task UpdateAsync(T entity)
+    {
+        _dbSet.Update(entity);
+    }
 }

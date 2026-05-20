@@ -34,6 +34,7 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
+        services.AddScoped<IEntryRepository, EntryRepository>();
 
         services.Configure<JwtOptions>(configuration.GetSection(("Jwt")));
 

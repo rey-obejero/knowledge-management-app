@@ -11,7 +11,8 @@ public interface IBaseRepository<T>
 
     Task<T?> FindByIdAsync(Guid id);
 
+    Task UpdateAsync(T entity);
+
     // Task<T> GetByIdAsync(Guid id);
-    // Task UpdateAsync(T entity);
     // Task DeleteAsync(Guid id);
 }

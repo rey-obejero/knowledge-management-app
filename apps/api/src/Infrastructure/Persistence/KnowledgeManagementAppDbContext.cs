@@ -18,10 +18,8 @@ public class KnowledgeManagementAppDbContext : IdentityDbContext<ApplicationUser
 
         modelBuilder.Entity<User>();
 
-        modelBuilder.Entity<Workspace>(entity =>
-        {
-            entity.HasKey(workspace => workspace.Id);
-            entity.Property(workspace => workspace.Id).ValueGeneratedOnAdd();
-        });
+        modelBuilder.Entity<Workspace>();
+
+        modelBuilder.Entity<Entry>();
     }
 }
