@@ -1,51 +1,55 @@
-using KnowledgeManagementApp.Api.Application.Dtos;
+using KnowledgeManagementApp.Api.Application.Features.Authentication.Commands;
+using KnowledgeManagementApp.Api.Application.Features.Authentication.Queries;
 using KnowledgeManagementApp.Api.Application.Interfaces;
 using KnowledgeManagementApp.Api.Application.Mappers;
 using KnowledgeManagementApp.Api.Domain.Entities;
 using KnowledgeManagementApp.Api.Domain.Interfaces;
 
-namespace KnowledgeManagementApp.Api.Application.Services;
+namespace KnowledgeManagementApp.Api.Application.Features.Authentication;
 
-public class AuthService : IAuthService
+public class AuthenticationService : IAuthenticationService
 {
+    private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IUserMapper _userMapper;
     private readonly IIdentityService _identityService;
     private readonly IJwtTokenService _jwtTokenService;
-    private readonly IUserRepository _userRepository;
 
-    public AuthService(
+    public AuthenticationService(
+        IUserRepository userRepository,
         IUnitOfWork unitOfWork,
+        IUserMapper userMapper,
         IIdentityService identityService,
-        IJwtTokenService jwtTokenService,
-        IUserRepository userRepository
+        IJwtTokenService jwtTokenService
     )
     {
+        _userRepository = userRepository;
         _unitOfWork = unitOfWork;
+        _userMapper = userMapper;
         _identityService = identityService;
         _jwtTokenService = jwtTokenService;
-        _userRepository = userRepository;
     }
 
-    public async Task<Result<AuthResultDto>> SignupAsync(
-        SignupRequestDto request,
+    public async Task<Result<AuthenticationResultDto>> SignUpAsync(
+        SignUpCommand command,
         CancellationToken cancellationToken = default
     )
     {
         var identityResult = await _identityService.CreateIdentityAsync(
-            request.Email,
-            request.Password,
+            command.Email,
+            command.Password,
             cancellationToken
         );
         if (!identityResult.IsSuccess)
         {
-            return Result<AuthResultDto>.Failure(identityResult.Error);
+            return Result<AuthenticationResultDto>.Failure(identityResult.Error);
         }
 
         var userId = Guid.Parse(identityResult.Value);
         var user = new User()
         {
             Id = userId,
-            Email = request.Email,
+            Email = command.Email,
             CreatedAt = DateTime.UtcNow,
         };
         await _userRepository.AddAsync(user);
@@ -54,28 +58,28 @@ public class AuthService : IAuthService
 
         var tokenResult = _jwtTokenService.GenerateToken(
             userId,
-            request.Email,
+            command.Email,
             Array.Empty<string>()
         );
 
-        return Result<AuthResultDto>.Success(
-            new AuthResultDto(user, tokenResult.Token, tokenResult.ExpiresAt)
+        return Result<AuthenticationResultDto>.Success(
+            new AuthenticationResultDto(user, tokenResult.Token, tokenResult.ExpiresIn)
         );
     }
 
-    public async Task<Result<AuthResultDto>> LoginAsync(
-        LoginRequestDto request,
+    public async Task<Result<AuthenticationResultDto>> SignInAsync(
+        SignInCommand command,
         CancellationToken cancellationToken = default
     )
     {
         var verifyResult = await _identityService.VerifyCredentialsAsync(
-            request.Email,
-            request.Password,
+            command.Email,
+            command.Password,
             cancellationToken
         );
         if (!verifyResult.IsSuccess)
         {
-            return Result<AuthResultDto>.Failure(verifyResult.Error);
+            return Result<AuthenticationResultDto>.Failure(verifyResult.Error);
         }
 
         var userId = Guid.Parse(verifyResult.Value);
@@ -83,22 +87,22 @@ public class AuthService : IAuthService
 
         var tokenResult = _jwtTokenService.GenerateToken(
             userId,
-            request.Email,
+            command.Email,
             Array.Empty<string>()
         );
-        return Result<AuthResultDto>.Success(
-            new AuthResultDto(user, tokenResult.Token, tokenResult.ExpiresAt)
+        return Result<AuthenticationResultDto>.Success(
+            new AuthenticationResultDto(user, tokenResult.Token, tokenResult.ExpiresIn)
         );
     }
 
-    public async Task<Result<UserResultDto>> GetAuthenticatedUserAsync(
-        Guid userId,
+    public async Task<Result<UserDto>> GetUserAsync(
+        GetUserQuery query,
         CancellationToken cancellationToken = default
     )
     {
-        var user = await _userRepository.FindByIdAsync(userId);
-        var mapper = new UserMapper();
+        var user = await _userRepository.FindByIdAsync(query.UserId);
+        var userDto = _userMapper.UserToUserDto(user);
 
-        return Result<UserResultDto>.Success(mapper.UserToUserResultDto(user));
+        return Result<UserDto>.Success(userDto);
     }
 }

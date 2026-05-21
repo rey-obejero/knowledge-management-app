@@ -40,6 +40,8 @@ public class JwtTokenService : IJwtTokenService
             signingCredentials: credentials
         );
 
-        return new TokenResult(new JwtSecurityTokenHandler().WriteToken(token), expiresAt);
+        var expiresInSeconds = (int)TimeSpan.FromMinutes(_options.ExpiryMinutes).TotalSeconds;
+
+        return new TokenResult(new JwtSecurityTokenHandler().WriteToken(token), expiresInSeconds);
     }
 }
