@@ -73,7 +73,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [Authorize]
-    [HttpGet("/get-me", Name = "GetMe")]
+    [HttpGet("get-me", Name = "GetMe")]
     [ProducesResponseType<UserDto>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
