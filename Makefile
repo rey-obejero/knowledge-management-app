@@ -1,13 +1,32 @@
-WEB_DIRECTORY = ./apps/web
-API_DIRECTORY = ./apps/api
+.DEFAULT_GOAL := help
 
-web:
-	cd ${WEB_DIRECTORY} && npm run dev
+WEB_DIRECTORY := ./apps/web/
+API_DIRECTORY := ./apps/api/src/
 
-api:
-	cd ${API_DIRECTORY}/src && dotnet watch run -lp https
+.PHONY: help
+help: ## Display usage instructions
+	@awk 'BEGIN { \
+		FS = ":.*##"; \
+		printf "\nUsage:\n make TARGET\n\nTargets:\n" \
+	} \
+	/^[a-zA-Z_-]+:.*?##/ { \
+		printf "  %-20s %s\n", $$1, $$2 \
+	}' $(MAKEFILE_LIST)
 
-.PHONY: docker/up
-docker/up:
-	sudo docker compose up -d
-	sudo docker compose ps
+.PHONY: web
+web: ## Starts the web client
+	@npm run --prefix ${WEB_DIRECTORY} dev
+
+.PHONY: api
+api: database-up ## Starts the API
+	@dotnet watch run -p ${API_DIRECTORY} -lp https
+
+.PHONY: database-up
+database-up: ## Starts database container
+	@docker compose up -d database
+	@docker compose ps database
+
+.PHONY: database-down
+database-down: ## Kills the database container
+	@docker compose up -d database
+	@docker compose ps database
