@@ -17,8 +17,9 @@ public static class InfrastructureServiceExtensions
     {
         services.AddDbContext<KnowledgeManagementAppDbContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString("SqliteConnection");
-            options.UseSqlite(connectionString);
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            options.UseNpgsql(connectionString);
+            // options.UseSqlite(connectionString);
         });
 
         services
