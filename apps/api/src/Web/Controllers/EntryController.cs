@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KnowledgeManagementApp.Api.Web.Controllers;
 
 [ApiController()]
-[Route("api/entries")]
+[Route("api/v1/entries")]
 public class EntryController : ControllerBase
 {
     private readonly IEntryService _entryService;

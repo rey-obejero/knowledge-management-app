@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Home, MessageSquare, FileText, Trash2 } from 'lucide-react';
 
-// Presentation Blocks
 import { SidebarHeader } from './sidebar-header';
 import { SidebarFooter } from './sidebar-footer';
 import { SidebarNavItem } from './sidebar-nav-item';
 import { SidebarSection } from './sidebar-section';
 
-// Cross-Boundary Domain State Logic hooks
 import { useWorkspace } from '@/features/workspaces/hooks/use-workspace';
 import { useCreateEntry } from '@/features/entries/hooks/use-create-entry';
 
