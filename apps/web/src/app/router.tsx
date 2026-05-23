@@ -2,6 +2,7 @@ import { paths } from '@/config/paths';
 import { createBrowserRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router/dom';
 import { SignInRoute } from './routes/authentication/sign-in';
+import { SignUpRoute } from './routes/authentication/sign-up.tsx';
 import { HomeRoute } from './routes/app/home';
 import { AppRoot } from './routes/app/root';
 import { WorkspacesRoute } from './routes/app/workspaces/workspaces';
@@ -17,6 +18,7 @@ export const createAppRouter = () =>
       children: [
         {
           path: paths.authentication.signUp.path,
+          element: <SignUpRoute />,
         },
         {
           path: paths.authentication.signIn.path,

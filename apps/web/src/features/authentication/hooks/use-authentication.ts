@@ -1,6 +1,9 @@
-import { authenticationApi } from "../api/authentication-api";
-import { useAuthenticationStore } from "../stores/authentication-store";
-import type { LoginRequest } from "../types/authentication.types";
+import { authenticationApi } from '../api/authentication-api';
+import { useAuthenticationStore } from '../stores/authentication-store';
+import type {
+  LoginRequest,
+  SignUpRequest,
+} from '../types/authentication.types';
 
 export const useAuthentication = () => {
   const {
@@ -13,6 +16,28 @@ export const useAuthentication = () => {
     setLoading,
     setError,
   } = useAuthenticationStore();
+
+  const signUp = async (data: SignUpRequest) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await authenticationApi.signUp(data);
+      const user = response.user;
+      const accessToken = response.token;
+
+      setAuth(user, accessToken);
+
+      return {
+        success: true,
+      };
+    } catch (error: any) {
+      const message =
+        error.response?.data?.error.description || 'Sign up failed';
+      setLoading(false);
+      setError(message);
+    }
+  };
 
   const signIn = async (data: LoginRequest) => {
     setLoading(true);
@@ -30,7 +55,7 @@ export const useAuthentication = () => {
       };
     } catch (error: any) {
       const message =
-        error.response?.data?.error.description || "Sign in failed";
+        error.response?.data?.error.description || 'Sign in failed';
       setLoading(false);
       setError(message);
     }
@@ -41,6 +66,7 @@ export const useAuthentication = () => {
     isAuthenticated,
     isLoading,
     error,
+    signUp,
     signIn,
   };
 };

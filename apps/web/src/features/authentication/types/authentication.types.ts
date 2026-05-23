@@ -1,5 +1,10 @@
 import type { User } from '@/types/api';
 
+export type SignUpRequest = {
+  email: string;
+  password: string;
+};
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -17,4 +22,4 @@ export interface AuthenticationState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-};
+}
