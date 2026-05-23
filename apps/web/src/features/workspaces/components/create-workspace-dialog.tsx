@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useCreateWorkspace } from '../hooks/use-create-workspace';
 
 interface WorkspaceCreateDialogProps {
   open: boolean;
@@ -23,6 +24,8 @@ export const CreateWorkspaceDialog = ({
   open,
   onOpenChange,
 }: WorkspaceCreateDialogProps) => {
+  const { mutate: createWorkspace, isPending } = useCreateWorkspace();
+
   const {
     register,
     handleSubmit,
@@ -34,14 +37,16 @@ export const CreateWorkspaceDialog = ({
 
   const onSubmit = (values: FormValues) => {
     if (!values.name.trim()) return;
-    // Add mutation submission logic here
+    createWorkspace({
+      name: values.name,
+    });
+    onOpenChange(false);
   };
 
-  // Safe interceptor to clear fields when dismissed
   const handleOpenChange = (isOpen: boolean) => {
     onOpenChange(isOpen);
     if (!isOpen) {
-      reset(); // Resets error messages and field values cleanly
+      reset();
     }
   };
 
@@ -59,8 +64,9 @@ export const CreateWorkspaceDialog = ({
             <Input
               id='workspace-name'
               placeholder='Enter the name for your workspace'
+              disabled={isPending}
               {...register('name', {
-                required: 'Workspace identity requires an alphanumeric title.',
+                required: 'Only alphaneumeric characters are allowed.',
               })}
             />
             {errors.name && (
