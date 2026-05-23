@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KnowledgeManagementApp.Api.Web.Controllers;
 
 [ApiController()]
-[Route("api/workspaces")]
+[Route("api/v1/workspaces")]
 public class WorkspaceController : ControllerBase
 {
     private readonly IWorkspaceService _workspaceService;
