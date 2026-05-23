@@ -24,7 +24,7 @@ export const useAuthentication = () => {
     try {
       const response = await authenticationApi.signUp(data);
       const user = response.user;
-      const accessToken = response.token;
+      const accessToken = response.accessToken;
 
       setAuth(user, accessToken);
 
@@ -46,7 +46,7 @@ export const useAuthentication = () => {
     try {
       const response = await authenticationApi.login(data);
       const user = response.user;
-      const accessToken = response.token;
+      const accessToken = response.accessToken;
 
       setAuth(user, accessToken);
 

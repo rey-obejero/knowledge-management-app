@@ -12,8 +12,8 @@ export interface LoginRequest {
 
 export interface AuthenticationResponse {
   user: User;
-  token: string;
-  expiresAt: string;
+  accessToken: string;
+  expiresIn: number;
 }
 
 export interface AuthenticationState {
