@@ -20,6 +20,8 @@ public class KnowledgeManagementAppDbContext : IdentityDbContext<ApplicationUser
 
         modelBuilder.Entity<Workspace>();
 
-        modelBuilder.Entity<Entry>();
+        modelBuilder
+            .Entity<Entry>()
+            .ComplexProperty(entry => entry.Content, content => content.ToJson());
     }
 }
