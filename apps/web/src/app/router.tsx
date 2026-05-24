@@ -44,12 +44,10 @@ export const createAppRouter = () =>
                 {
                   path: paths.app.entries.path,
                   element: <EntriesRoute />,
-                  children: [
-                    {
-                      path: paths.app.entry.path,
-                      element: <EntryRoute />,
-                    },
-                  ],
+                },
+                {
+                  path: paths.app.entry.path,
+                  element: <EntryRoute />,
                 },
               ],
             },

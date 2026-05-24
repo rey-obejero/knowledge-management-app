@@ -18,6 +18,14 @@ export const entriesApi = {
     return response.data;
   },
 
+  getEntries: async (params: {
+    workspaceId: string;
+    schema?: string;
+  }): Promise<Entry[]> => {
+    const response = await apiClient.get<Entry[]>(API_ENTRIES_URL, { params });
+    return response.data;
+  },
+
   updateEntry: async (data: UpdateEntryRequest): Promise<Entry> => {
     const response = await apiClient.put<Entry>(API_ENTRIES_URL, data);
     return response.data;

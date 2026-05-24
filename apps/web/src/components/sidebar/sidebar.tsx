@@ -86,6 +86,9 @@ export function Sidebar() {
               label='Pages'
               showAddOnHover
               onAddClick={handleCreateEntry}
+              onClick={() => {
+                navigate(`/w/${activeWorkspaceId}/entries?=page`);
+              }}
             />
           </SidebarSection>
 
