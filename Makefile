@@ -19,7 +19,7 @@ web: ## Starts the web client
 
 .PHONY: api
 api: database-up ## Starts the API
-	@dotnet watch run -p ${API_DIRECTORY} -lp https
+	@dotnet watch run --project ${API_DIRECTORY} -lp https
 
 .PHONY: database-up
 database-up: ## Starts database container
