@@ -20,6 +20,6 @@ public class KnowledgeManagementAppDbContext : IdentityDbContext<ApplicationUser
 
         modelBuilder.Entity<Workspace>();
 
-        modelBuilder.Entity<Entry>().Property(entry => entry.Content).HasColumnType("jsonb");
+        modelBuilder.Entity<Entry>();
     }
 }
