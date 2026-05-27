@@ -24,4 +24,14 @@ The Application layer is responsible for the business logic of the application, 
 
 The Domain layer models the business data structures, data access contracts, and the domain-specific errors. Unlike traditional Clean Architecture implementations, this layer simply uses anemic domain models as opposed to rich domain models, delegating invariant validations instead to the Application layer.
 
+## Technologies and Tools
+
+- Runtime: .NET
+- Framework: ASP.NET Core
+- Mappings: Mapperly
+- Logging: Serilog
+- Object-Relational Mapping (ORM): Entity Framework Core
+- Database: PostgreSQL
+- OpenAPI documentation: NSwag
+
 ## Local Development
