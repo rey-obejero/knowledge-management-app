@@ -1,6 +1,45 @@
-# Project Structure
+# Knoweledge Management App
+
+## Project Overview
+
+Knowledge Management App is a web-based personal knowledge management (PKM) application, intended to serve as a "second brain." The application provides a structured way to classify and organize information, taking inspiration from well-known methodologies such as Project, Areas, Resources, and Archives (PARA) and the Gettings Things Done (GTD).
+
+## Prerequisites
+
+This application was built with React, TypeScript, ASP.NET Core, C#, and Docker. To run or develop, the following tooling are required:
+
+- Docker and Docker Compose
+- Node.js
+- .NET 10.0 SDK
+- Make
+
+## Getting Started
+
+Before proceeding, ensure the necessary tooling are installed.
+
+To run the project, use the Makefile at the root of the directory:
+
+1. To view the valid Make targets, use
+
+```console
+make
+```
+
+1. Start the web client with
+
+```console
+make web
 
 ```
+
+1. Start the API server with
+
+````console
+make api
+
+## Project Structure
+
+```text
 
 .
 ├── apps                                                # Contains the deployable units of the project
@@ -195,4 +234,4 @@
 └── README.md
 
 69 directories, 143 files
-```
+````
