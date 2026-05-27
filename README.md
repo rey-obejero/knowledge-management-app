@@ -6,7 +6,7 @@ Knowledge Management App is a web-based personal knowledge management (PKM) appl
 
 ## Prerequisites
 
-This application was built with React, TypeScript, ASP.NET Core, C#, and Docker. To run or develop, the following tooling are required:
+This application was built with React, TypeScript, ASP.NET Core, C#, and Docker. To run or develop, the following tools are required:
 
 - Docker and Docker Compose
 - Node.js
@@ -15,27 +15,27 @@ This application was built with React, TypeScript, ASP.NET Core, C#, and Docker.
 
 ## Getting Started
 
-Before proceeding, ensure the necessary tooling are installed.
+Before proceeding, ensure the necessary tools are installed.
 
 To run the project, use the Makefile at the root of the directory:
 
 1. To view the valid Make targets, use
 
-```console
-make
-```
+   ```console
+   make
+   ```
 
-1. Start the web client with
+2. Start the web client with
 
-```console
-make web
+   ```console
+   make web
+   ```
 
-```
+3. Start the API server and the local database with
 
-1. Start the API server with
-
-````console
-make api
+   ```console
+   make api
+   ```
 
 ## Project Structure
 
@@ -234,4 +234,8 @@ make api
 └── README.md
 
 69 directories, 143 files
-````
+```
+
+```
+
+```
