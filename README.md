@@ -39,6 +39,10 @@ To run the project, use the Makefile at the root of the directory:
 
 ## Project Structure
 
+See the [API documentation](/apps/api/README.md) for more detailed information on the API.
+
+See the [web client documentation](/apps/web/README.md) for more detailed information on the web client.
+
 ```text
 
 .
