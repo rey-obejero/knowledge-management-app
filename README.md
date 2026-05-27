@@ -1,4 +1,4 @@
-# Knoweledge Management App
+# Knowledge Management App
 
 ## Project Overview
 
