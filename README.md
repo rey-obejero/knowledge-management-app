@@ -57,6 +57,18 @@ See the [web client documentation](/apps/web/README.md) for more detailed inform
 ├── docker-compose.yml
 ├── Makefile
 ├── README.md
-└── skills-lock.json
+└── skills-loCck.json
 
 ```
+
+## Roadmap
+
+### Features
+
+- [ ] Authentication
+  - [ ] OIDC compliance
+  - [ ] OAuth 2.02.0
+
+### Internal
+
+- [ ] Nginx Routing for smoother local-first development
