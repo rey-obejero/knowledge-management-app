@@ -71,8 +71,10 @@ See the [web client documentation](/apps/web/README.md) for more detailed inform
 - [ ] Workspaces
   - [ ] Workspace memberships
   - [ ] Real-time entry collaboration (least priority)
+  - [ ] Dynamic and granular roles/permissions
 - [ ] Entries
   - Entries sharing for non-workspace members
+  - Browser extension for quick GTD-style inboxing
 - [ ] Human-readable URLs for improved bookmark and address bar autocomplete legibility
 - [ ] Conversations
 - [ ] AI
