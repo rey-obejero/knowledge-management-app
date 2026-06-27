@@ -72,6 +72,7 @@ See the [web client documentation](/apps/web/README.md) for more detailed inform
   - [ ] Workspace memberships
   - [ ] Real-time entry collaboration (least priority)
   - [ ] Dynamic and granular roles/permissions
+  - [ ] Worksace API key generatino for programmatic access
 - [ ] Entries
   - Entries sharing for non-workspace members
   - Browser extension for quick GTD-style inboxing
