@@ -24,14 +24,14 @@ export function WorkspaceSwitcher() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className='group hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors focus:outline-none'>
-            <span className='group-hover:text-sidebar-primary-foreground/85 bg-sidebar-primary text-sidebar-primary-foreground flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-xs font-semibold'>
+          <button className='hover:bg-sidebar-accent flex w-full cursor-pointer items-center gap-2 rounded-full px-4 py-2 transition-colors mb-3 focus:outline-none'>
+            <span className='bg-sidebar-primary text-sidebar-primary-foreground flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full text-xs font-semibold'>
               {activeWorkspace?.name?.charAt(0) ?? 'W'}
             </span>
-            <span className='text-sidebar-foreground flex-1 truncate text-left text-sm font-semibold tracking-wide'>
+            <span className='text-sidebar-foreground flex-1 truncate text-left text-sm font-medium'>
               {activeWorkspace?.name ?? 'Select workspace'}
             </span>
-            <ChevronDown className='text-muted-foreground/70 h-3.5 w-3.5 shrink-0' />
+            <ChevronDown className='text-muted-foreground h-3 w-3 shrink-0' />
           </button>
         </DropdownMenuTrigger>
 

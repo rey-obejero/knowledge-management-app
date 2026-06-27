@@ -10,7 +10,7 @@ export const useUpdateEntry = () => {
     mutationFn: entriesApi.updateEntry,
     onSuccess: (updatedEntry) => {
       queryClient.invalidateQueries({
-        queryKey: ['entry', updatedEntry.id],
+        queryKey: [...ENTRY_QUERY_KEY, updatedEntry.id],
       });
     },
   });

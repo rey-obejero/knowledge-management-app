@@ -6,9 +6,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { paths } from '@/config/paths';
 import { LoaderCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const signInSchema = z.object({
-  email: z.string().email('Email address is invalid.'),
+  email: z.email('Email address is invalid.'),
   password: z.string().min(1, 'Password is required.'),
 });
 
@@ -27,7 +28,8 @@ export const SignInForm = () => {
   const onSubmit = async (data: SignInFormData) => {
     const response = await signIn(data);
     if (response?.success) {
-      window.location.href = paths.app.home.getHref();
+      const navigate = useNavigate();
+      navigate(paths.app.home.getHref());
     }
   };
 

@@ -139,7 +139,6 @@
   background-color: var(--popover) !important;
   color: var(--popover-foreground) !important;
   padding: 6px !important;
-  /* Premium, multi-layered diffused layout shadows */
   box-shadow:
     0 10px 25px -5px rgba(0, 0, 0, 0.04),
     0 8px 10px -6px rgba(0, 0, 0, 0.04),

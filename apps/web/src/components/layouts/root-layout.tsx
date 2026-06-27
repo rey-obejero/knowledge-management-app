@@ -1,3 +1,5 @@
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { Sidebar } from '../sidebar';
 
 export interface RootLayoutProps {
@@ -7,8 +9,12 @@ export interface RootLayoutProps {
 export const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <div className='bg-background flex h-screen w-screen overflow-hidden'>
-      <Sidebar />
-      <main className='flex-1 overflow-hidden'>{children}</main>
+      <TooltipProvider>
+        <SidebarProvider>
+          <Sidebar />
+          <main className='flex-1 overflow-hidden'>{children}</main>
+        </SidebarProvider>
+      </TooltipProvider>
     </div>
   );
 };
