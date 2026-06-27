@@ -67,7 +67,16 @@ See the [web client documentation](/apps/web/README.md) for more detailed inform
 
 - [ ] Authentication
   - [ ] OIDC compliance
-  - [ ] OAuth 2.02.0
+  - [ ] OAuth schemes
+- [ ] Workspaces
+  - [ ] Workspace memberships
+  - [ ] Real-time entry collaboration (least priority)
+- [ ] Entries
+  - Entries sharing for non-workspace members
+- [ ] Human-readable URLs for improved bookmark and address bar autocomplete legibility
+- [ ] Conversations
+- [ ] AI
+  - [ ] Conversations assistant
 
 ### Internal
 
